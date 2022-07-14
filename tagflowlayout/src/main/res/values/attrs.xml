@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="TagFlowLayout">
+        <attr name="chipSpacing" format="dimension" />
+        <attr name="chipSpacingHorizontal" format="dimension"/>
+        <attr name="chipSpacingVertical" format="dimension" />
+        <attr name="singleLine" format="boolean" />
+        <attr name="singleSelection" format="boolean" />
+        <attr name="selectionRequired" format="boolean" />
+        <attr name="selectMax" format="integer"/>
+    </declare-styleable>
+</resources>
