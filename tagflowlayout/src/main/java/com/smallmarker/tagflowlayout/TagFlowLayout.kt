@@ -3,11 +3,9 @@ package com.smallmarker.tagflowlayout
 import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Log
 import android.view.View
 import androidx.annotation.Dimension
 import androidx.core.content.res.use
-import androidx.core.view.ViewCompat
 import com.google.android.material.internal.CheckableGroup
 import com.google.android.material.internal.FlowLayout
 import com.google.android.material.internal.ThemeEnforcement
@@ -25,6 +23,7 @@ class TagFlowLayout : FlowLayout {
 
     private val checkableGroup = CheckableGroup<TagView>()
 
+    // Adapter
     var adapter: TagFlowAdapter<*>? = null
         set(value) {
             field = value?.apply {
@@ -35,15 +34,22 @@ class TagFlowLayout : FlowLayout {
             field?.notifyDataSetChange()
         }
 
+    // Tag左右边距
     @Dimension
-    private var chipSpacingHorizontal = 0
+    private var tagSpacingHorizontal = 0
 
+    // Tag上下边距
     @Dimension
-    private var chipSpacingVertical = 0
+    private var tagSpacingVertical = 0
 
+    // Tag点击事件
     private var tagClickListener: TagClickListener? = null
 
+    // Tag状态变更监听事件
     private var checkedChangedListener: CheckedChangedListener? = null
+
+    // 最大选择
+    private var selectMax: Int = 0
 
     private val passThroughListener = PassThroughHierarchyChangeListener()
 
@@ -61,22 +67,23 @@ class TagFlowLayout : FlowLayout {
             defStyleAttr,
             -1
         ).use {
-            val chipSpacing = it.getDimensionPixelOffset(R.styleable.TagFlowLayout_chipSpacing, 0);
-            setChipSpacingHorizontal(
+            val tagSpacing = it.getDimensionPixelOffset(R.styleable.TagFlowLayout_tagSpacing, 0);
+            setTagSpacingHorizontal(
                 it.getDimensionPixelOffset(
-                    R.styleable.TagFlowLayout_chipSpacingHorizontal,
-                    chipSpacing
+                    R.styleable.TagFlowLayout_tagSpacingHorizontal,
+                    tagSpacing
                 )
             )
-            setChipSpacingVertical(
+            setTagSpacingVertical(
                 it.getDimensionPixelOffset(
-                    R.styleable.TagFlowLayout_chipSpacingVertical,
-                    chipSpacing
+                    R.styleable.TagFlowLayout_tagSpacingVertical,
+                    tagSpacing
                 )
             )
             isSingleLine = it.getBoolean(R.styleable.TagFlowLayout_singleLine, false)
             setSingleSelection(it.getBoolean(R.styleable.TagFlowLayout_singleSelection, false))
             setSelectionRequired(it.getBoolean(R.styleable.TagFlowLayout_selectionRequired, false))
+            setSelectMax(it.getInt(R.styleable.TagFlowLayout_selectMax, 0))
         }
         checkableGroup.setOnCheckedStateChangeListener {
             checkedChangedListener?.invoke(
@@ -87,14 +94,23 @@ class TagFlowLayout : FlowLayout {
         super.setOnHierarchyChangeListener(passThroughListener)
     }
 
+    /**
+     * 设置Tag点击事件
+     */
     fun setOnTagClickListener(tagClickListener: TagClickListener) {
         this.tagClickListener = tagClickListener
     }
 
+    /**
+     * 设置Tag状态变更监听事件
+     */
     fun setCheckedChangedListener(checkedChangedListener: CheckedChangedListener) {
         this.checkedChangedListener = checkedChangedListener
     }
 
+    /**
+     * 刷新Adapter
+     */
     private fun changeAdapter() {
         (adapter as TagFlowAdapter<Any>?)?.let {
             removeAllViews()
@@ -105,51 +121,106 @@ class TagFlowLayout : FlowLayout {
                     isClickable = false
                 }
                 if (child != null) {
-                    addView(TagView(context).apply {
+                    val tagView = TagView(context).apply {
                         addView(child)
-                        isChecked = it.isChecked(i, item)
-                        setOnClickListener {
-                            this.isChecked = !isChecked
-                            tagClickListener?.invoke(this, i, this@TagFlowLayout)
-                        }
-                    })
+                    }
+                    addView(tagView)
+                    setChildCheckedState(it.isChecked(i, item) && !isSelectMax(), i, tagView)
+                    tagView.setOnClickListener {
+                        setChildCheckedState(!tagView.isChecked && !isSelectMax(), i, tagView)
+                        tagClickListener?.invoke(this, i, this@TagFlowLayout)
+                    }
                 }
             }
         }
     }
 
-    fun getCheckedChipIds(): List<Int> {
+    /**
+     * 设置TAG状态
+     */
+    private fun setChildCheckedState(isChecked: Boolean, position: Int, view: TagView) {
+        view.isChecked = isChecked
+        adapter?.onCheckedChanged(isChecked, position, view.getTagView())
+    }
+
+    /**
+     * 是否达到最大的选择数量
+     */
+    fun isSelectMax(): Boolean {
+        return if (selectMax > 0) {
+            checkableGroup.checkedIds.size >= selectMax
+        } else {
+            false
+        }
+    }
+
+    /**
+     * 获取选中集合下标组
+     */
+    fun getCheckedTagOrders(): List<Int> {
         return checkableGroup.getCheckedIdsSortedByChildOrder(this)
     }
 
-    fun getCheckedChipId(): Int {
+    /**
+     * 获取选中集合下标
+     */
+    fun getCheckedTagOrder(): Int {
         return checkableGroup.singleCheckedId
     }
 
+    /**
+     * 清除所有选中数据
+     */
     fun clearCheck() {
         checkableGroup.clearCheck()
     }
 
+    /**
+     * 设置单选是否为必选项
+     */
     fun setSelectionRequired(selectionRequired: Boolean) {
         checkableGroup.isSelectionRequired = selectionRequired
     }
 
+    /**
+     * 设置是否单选
+     */
     fun setSingleSelection(singleSelection: Boolean) {
         checkableGroup.isSingleSelection = singleSelection
     }
 
-    fun setChipSpacingHorizontal(@Dimension chipSpacingHorizontal: Int) {
-        if (this.chipSpacingHorizontal != chipSpacingHorizontal) {
-            this.chipSpacingHorizontal = chipSpacingHorizontal
-            itemSpacing = chipSpacingHorizontal
+    /**
+     * 设置最大选中数量
+     */
+    fun setSelectMax(selectMax: Int) {
+        this.selectMax = selectMax
+    }
+
+    /**
+     * 设置是否单选
+     */
+    override fun setSingleLine(singleLine: Boolean) {
+        super.setSingleLine(singleLine)
+    }
+
+    /**
+     * 设置TAG左右边距
+     */
+    fun setTagSpacingHorizontal(@Dimension tagSpacingHorizontal: Int) {
+        if (this.tagSpacingHorizontal != tagSpacingHorizontal) {
+            this.tagSpacingHorizontal = tagSpacingHorizontal
+            itemSpacing = tagSpacingHorizontal
             requestLayout()
         }
     }
 
-    fun setChipSpacingVertical(@Dimension chipSpacingVertical: Int) {
-        if (this.chipSpacingVertical != chipSpacingVertical) {
-            this.chipSpacingVertical = chipSpacingVertical
-            lineSpacing = chipSpacingVertical
+    /**
+     * 设置TAG上下边距
+     */
+    fun setTagSpacingVertical(@Dimension tagSpacingVertical: Int) {
+        if (this.tagSpacingVertical != tagSpacingVertical) {
+            this.tagSpacingVertical = tagSpacingVertical
+            lineSpacing = tagSpacingVertical
             requestLayout()
         }
     }
@@ -164,12 +235,7 @@ class TagFlowLayout : FlowLayout {
         var onHierarchyChangeListener: OnHierarchyChangeListener? = null
         override fun onChildViewAdded(parent: View, child: View) {
             if (parent === this@TagFlowLayout && child is TagView) {
-                var id = child.getId()
-                // generates an id if it's missing
-                if (id == NO_ID) {
-                    id = ViewCompat.generateViewId()
-                    child.setId(id)
-                }
+                child.setId(childCount - 1)
                 checkableGroup.addCheckable(child)
             }
             onHierarchyChangeListener?.onChildViewAdded(parent, child)

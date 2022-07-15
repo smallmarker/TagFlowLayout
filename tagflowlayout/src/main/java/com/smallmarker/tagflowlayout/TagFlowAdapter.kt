@@ -36,14 +36,23 @@ class TagFlowAdapter<T>(private val tagList: MutableList<T>) {
         onCheckedChangedCallBack?.invoke(isChecked, position, view)
     }
 
+    /**
+     * 设置TAG
+     */
     fun setView(callback: ViewCallBack<T>) {
         this.viewCallBack = callback
     }
 
+    /**
+     * 设置当前状态
+     */
     fun setChecked(callback: CheckedCallBack<T>) {
         this.checkedCallBack = callback
     }
 
+    /**
+     * 状态监听
+     */
     fun setCheckedChanged(callBack: OnCheckedChangedCallBack) {
         this.onCheckedChangedCallBack = callBack
     }

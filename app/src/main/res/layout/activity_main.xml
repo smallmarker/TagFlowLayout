@@ -19,14 +19,56 @@
             android:layout_height="0dp"
             android:layout_margin="24dp"
             android:layout_weight="1"
-            app:chipSpacing="16dp"/>
+            app:tagSpacing="16dp"/>
+
+        <TextView
+            android:id="@+id/tv_tip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="20dp" />
+
+        <Button
+            android:id="@+id/btn_single"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="设置单选（必选）"/>
+
+        <Button
+            android:id="@+id/btn_single_normal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="设置单选（非必选）"/>
+
+        <Button
+            android:id="@+id/btn_mutly"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="设置多选"/>
+
+        <Button
+            android:id="@+id/btn_single_line"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="设置单行"/>
+
+        <Button
+            android:id="@+id/btn_mutly_line"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="设置多行"/>
 
         <Button
             android:id="@+id/btn_notify"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="60dp"
-            android:text="notify" />
+            android:layout_marginBottom="30dp"
+            android:text="刷新数据" />
 
     </LinearLayout>
 </layout>
