@@ -1,15 +1,15 @@
 
-#### 简介
+### 简介
 
 **这是一个Android流式布局，根据鸿翔大神之前写的[FlowLayout](https://github.com/hongyangAndroid/FlowLayout)设计思路结合`Material`库中的`ChipGroup`设计架构衍生而来**
 
-#### 效果展示
+### 效果展示
 
 ![tagflowlayout_demo](./image/tagflowlayout_demo.gif)
 
-#### 方法
+### 方法
 
-##### setter
+#### setter
 
 | 方法名称 | 作用 | 示例 |
 | :----: | :----: | :----: |
@@ -22,7 +22,7 @@
 | `setOnTagClickListener(tagClickListener: TagClickListener)` | 设置Tag点击事件 | `setOnTagClickListener { view, position, parent -> }` |
 | `setCheckedChangedListener(checkedChangedListener: CheckedChangedListener)` | 设置Tag状态变更监听事件 | `setCheckedChangedListener { group, checkedIds -> }` |
 
-##### getter
+#### getter
 
 | 方法名称 | 作用 | 返回类型 |
 | :----: | :----: | :----: |
@@ -43,13 +43,13 @@
 |`app:selectionRequired`|是否为必选项（默认false）|`app:selectionRequired="true"`|
 |`app:selectMax`|最大选择数量（<=0为无效值）|`app:selectMax="10"`|
 
-#### 用法
+### 用法
 ```
 dependencies {
     implementation 'io.github.smallmarker:tagflowlayout:0.0.1'
 }
 ```
-#### 声明
+### 声明
 ```
 <com.smallmarker.tagflowlayout.TagFlowLayout
             android:id="@+id/tag_flow_layout"
@@ -57,9 +57,9 @@ dependencies {
             android:layout_height="wrap_content"
             app:tagSpacing="16dp"/>
 ```
-#### Adapter
+### Adapter
 
-##### 方法属性
+#### 方法属性
 
 * 创建Adapter：`TagFlowAdapter.create(dataList)`
 * 设置Tag：`setView(parent: TagFlowLayout, position: Int, t: T)`
@@ -68,7 +68,7 @@ dependencies {
 * 刷新适配器：`notifyDataSetChange()`
 
 
-##### 使用步骤
+#### 使用步骤
 
 * **设置数据**
 
