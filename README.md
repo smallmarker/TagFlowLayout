@@ -65,31 +65,71 @@ dependencies {
 * 设置Tag：`setView(parent: TagFlowLayout, position: Int, t: T)`
 * 设置Tag状态：`setChecked(position: Int, t: T)`
 * 监听状态变化：`setCheckedChanged(isChecked: Boolean, position: Int, view: View)`
+* 刷新适配器：`notifyDataSetChange()`
 
 
 ##### 使用步骤
+
+* **设置数据**
+
 ```
-// 添加数据
-dataList.addAll(generateList())
-// 设置Adapter
-tagFlowLayout.adapter = TagFlowAdapter.create(dataList) {
-// 设置tag
-setView { parent, position, t ->
-   TextView(parent.context).apply {
-       text = t
-       setBackgroundResource(R.drawable.bg_tag_selector)
-       setPadding(10, 10, 10, 10)
-       }
-    }
-// 设置tag状态
-setChecked { position, t ->
-   position % 2 == 0
-}
-// 状态监听
-setCheckedChanged { isChecked, position, view ->
-   Log.d("TAG", "当前TAG状态：${isChecked}, ${position}")
-  }
-}
+        // 设置Adapter
+        binding.tagFlowLayout.adapter = TagFlowAdapter.create(dataList) {
+            setView { parent, position, t ->
+                TextView(parent.context).apply {
+                    text = t
+                    setBackgroundResource(R.drawable.bg_tag_selector)
+                    setPadding(10, 10, 10, 10)
+                }
+            }
+        }
 ```
 
+* **选中状态**
+
+支持通过`state=checked`来控制选中和取消
+
+```
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_checked="true">
+        <shape android:shape="rectangle">
+            <corners android:radius="6dp" />
+            <stroke android:width="1.2dp" android:color="#374D9D" />
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="6dp" />
+            <stroke android:width="1.2dp" android:color="#C4C7D1" />
+        </shape>
+    </item>
+</selector>
+```
+
+也可以自己在`Adapter` 的`setCheckedChanged`处理显示
+
+```
+setCheckedChanged { isChecked, position, view ->
+                Log.d("TAG", "当前TAG状态：${isChecked}, ${position}")
+                view.setBackgroundColor(if (isChecked) {
+                    Color.RED
+                } else {
+                    Color.GRAY
+                })
+            }
+```
+
+* **事件**
+
+```
+        // 点击事件
+        binding.tagFlowLayout.setOnTagClickListener { view, position, parent ->
+            Log.d("TAG", "当前选中TAG： ${position}")
+        }
+
+        // 状态监听
+        binding.tagFlowLayout.setCheckedChangedListener { group, checkedIds ->
+            binding.tvTip.text = "当前选中TAG序号：${checkedIds}"
+        }
+```
 
