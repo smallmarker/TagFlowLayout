@@ -132,4 +132,7 @@ setCheckedChanged { isChecked, position, view ->
             binding.tvTip.text = "当前选中TAG序号：${checkedIds}"
         }
 ```
+### 总结
+
+**偶然发现`material`库中`chip`组件，其通过`ChipGroup`实现流式布局的设计，加上很早之前有用过鸿神的`FlowLayout`库，所以就在此基础上写了一个新的流式布局组件，该组件在类的命名上还是沿用了鸿神之前的`FlowLayout`，为了不依赖`material`库的较高版本的限制，故将需要用到的类抽取使用，做兼容处理**
 
