@@ -1,7 +1,7 @@
 
 ### 简介
 
-**这是一个Android流式布局，根据鸿翔大神之前写的[FlowLayout](https://github.com/hongyangAndroid/FlowLayout)设计思路结合`Material`库中的`ChipGroup`设计架构衍生而来**
+**这是一个Android流式布局，根据鸿翔大神之前写的[FlowLayout](https://github.com/hongyangAndroid/FlowLayout)设计思路结合`Material`库中的`ChipGroup`设计架构衍生而来，全新的流式布局[TagFlowLayout](https://github.com/smallmarker/TagFlowLayout)组件**
 
 ### 效果展示
 
