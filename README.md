@@ -46,7 +46,7 @@
 ### 用法
 ```
 dependencies {
-    implementation 'io.github.smallmarker:tagflowlayout:0.0.1'
+    implementation 'io.github.smallmarker:tagflowlayout:1.0'
 }
 ```
 ### 声明

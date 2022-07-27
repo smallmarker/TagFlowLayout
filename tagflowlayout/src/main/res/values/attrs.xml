@@ -9,4 +9,12 @@
         <attr name="selectionRequired" format="boolean" />
         <attr name="selectMax" format="integer"/>
     </declare-styleable>
+
+    <declare-styleable name="FlowLayout">
+        <!-- Horizontal spacing between two items being laid out. -->
+        <attr format="dimension" name="itemSpacing"/>
+        <!-- Vertical Spacing between two lines of items being laid out. -->
+        <attr format="dimension" name="lineSpacing"/>
+    </declare-styleable>
+    <item name="row_index_key" type="id"/>
 </resources>

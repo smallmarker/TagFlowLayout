@@ -1,21 +1,18 @@
 package com.smallmarker.tagflowlayout
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import android.widget.FrameLayout
-import com.google.android.material.internal.MaterialCheckable
-
 
 /**
  * @author   zl
  * @Date     2022/7/14
  **/
-@SuppressLint("RestrictedApi")
 class TagView : FrameLayout, MaterialCheckable<TagView> {
 
-    private var onCheckedChangeListenerInternal: MaterialCheckable.OnCheckedChangeListener<TagView>? = null
+    private var onCheckedChangeListenerInternal: MaterialCheckable.OnCheckedChangeListener<TagView>? =
+        null
 
     private var isChecked = false
 

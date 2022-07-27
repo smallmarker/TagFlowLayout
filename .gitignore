@@ -13,4 +13,7 @@
 .externalNativeBuild
 .cxx
 local.properties
-gradle.properties
+/gradle.properties
+/maven.properties
+/secring.gpg
+/maven-publish.gradle

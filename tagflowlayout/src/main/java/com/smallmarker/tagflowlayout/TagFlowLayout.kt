@@ -1,14 +1,10 @@
 package com.smallmarker.tagflowlayout
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import androidx.annotation.Dimension
 import androidx.core.content.res.use
-import com.google.android.material.internal.CheckableGroup
-import com.google.android.material.internal.FlowLayout
-import com.google.android.material.internal.ThemeEnforcement
 
 private typealias TagClickListener = (view: View, position: Int, parent: TagFlowLayout) -> Unit
 
@@ -18,7 +14,6 @@ private typealias CheckedChangedListener = (group: TagFlowLayout, checkedIds: Mu
  * @author   zl
  * @Date     2022/7/14
  **/
-@SuppressLint("RestrictedApi")
 class TagFlowLayout : FlowLayout {
 
     private val checkableGroup = CheckableGroup<TagView>()
@@ -60,8 +55,7 @@ class TagFlowLayout : FlowLayout {
         attrs,
         defStyleAttr
     ) {
-        ThemeEnforcement.obtainStyledAttributes(
-            context,
+        context.obtainStyledAttributes(
             attrs,
             R.styleable.TagFlowLayout,
             defStyleAttr,
