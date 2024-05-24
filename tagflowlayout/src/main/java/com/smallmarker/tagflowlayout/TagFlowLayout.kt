@@ -121,11 +121,35 @@ class TagFlowLayout : FlowLayout {
                     addView(tagView)
                     setChildCheckedState(it.isChecked(i, item) && !isSelectMax(), i, tagView)
                     tagView.setOnClickListener {
-                        setChildCheckedState(!tagView.isChecked && !isSelectMax(), i, tagView)
+                        doSelect(tagView, i)
                         tagClickListener?.invoke(this, i, this@TagFlowLayout)
                     }
                 }
             }
+        }
+    }
+
+    private fun doSelect(child: TagView, position: Int) {
+        // 是否是单选
+        if (checkableGroup.isSingleSelection) {
+            val preIndex = getCheckedTagOrder()
+            // 非必选
+            if (!checkableGroup.isSelectionRequired && preIndex == position) {
+                setChildCheckedState(!child.isChecked && !isSelectMax(), position, child)
+            } else {
+                val pre = getChildAt(preIndex) as? TagView
+                if (pre != null) {
+                    setChildCheckedState(false, preIndex, pre)
+                }
+                setChildCheckedState(true, position, child)
+            }
+        } else {
+            val orders = getCheckedTagOrders()
+            // 必选
+            if (checkableGroup.isSelectionRequired && orders.size == 1 && orders[0] == position) {
+                return
+            }
+            setChildCheckedState(!child.isChecked && !isSelectMax(), position, child)
         }
     }
 

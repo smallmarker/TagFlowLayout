@@ -42,6 +42,13 @@ class MainActivity : AppCompatActivity() {
             }
             setCheckedChanged { isChecked, position, view ->
                 Log.d("TAG", "当前TAG状态：${isChecked}, ${position}")
+                (view as TextView).setTextColor(
+                    if (isChecked) {
+                        getColor(R.color.purple_700)
+                    }  else {
+                        getColor(R.color.black)
+                    }
+                )
             }
         }
     }
